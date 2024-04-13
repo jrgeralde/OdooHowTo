@@ -5,22 +5,17 @@ class MyClass(models.Model):
     
     @api.model
     def get_table_id(self):
-        table_id = self.env['ir.model'].search([('model', '=', 'my.module')], limit=1)
-        if table_id:
-            return table_id.id
+        for rec in self:
+           table_id = rec.id
+         if table_id
+            return table_id
         else:
             return False
             
- # to get the primary key id value
- table_id = MyClass.get_table_id()
-if table_id:
-    print("Table ID:", table_id)
-else:
-    print("Table not found.")
-  
-#or  Assuming `my_record` is an instance of MyModel
+#or  Assuming `rec (in self.rec as in for rec in self)` is an instance of MyModel
+table_id = rec.id
 table_id = my_record.get_table_id()
 if table_id:
-    print("Table ID:", table_id)
+    print("Table ID:"+str(table_id))
 else:
     print("Table not found.")
