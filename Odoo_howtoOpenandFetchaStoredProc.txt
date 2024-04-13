@@ -1,0 +1,29 @@
+-- query procedure
+class YourModel(models.Model):
+    _name = 'your.model'
+
+    @api.model
+    def call_stored_procedure_with_parameters(self, param1, param2):
+        # Call the stored procedure with parameters
+        self._cr.execute("CALL your_stored_procedure_name(%s, %s)", (param1, param2))
+        
+        # Fetch the result
+        result = self._cr.fetchall()
+        
+        # Process the result as needed
+        for row in result:
+            # Do something with each row of the result
+            pass
+
+-- non query procedure
+class YourModel(models.Model):
+    _name = 'your.model'
+
+    @api.model
+    def call_stored_procedure_no_result(self, param1, param2):
+        # Call the stored procedure with parameters
+        self._cr.execute("CALL your_stored_procedure_name(%s, %s)", (param1, param2))
+        
+        # Commit the transaction if necessary
+        self._cr.commit()
+

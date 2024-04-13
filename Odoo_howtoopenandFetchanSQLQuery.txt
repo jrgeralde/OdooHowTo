@@ -1,0 +1,53 @@
+# ------------- fetch a query ---------------------
+class YourModel(models.Model):
+    _name = 'your.model'
+
+
+    @api.model
+    def your_method(self):
+	# Define parameters
+	param1 = 'value1'
+    	param2 = 'value2'
+        # Execute SQL query
+        self._cr.execute("SELECT field1, field2 FROM your_table WHERE condition")
+        # Execute SQL query with parameters, \ -means continue to next line
+        
+        self._cr.execute("SELECT * FROM your_table WHERE column1 = %s AND column2 = %s", \
+         	(param1,param2))
+        # Fetch the results
+        result = self._cr.fetchall()
+
+        # Initialize variables to store fetched fields
+        field1_values = []
+        field2_values = []
+
+	
+
+        # Process the results
+        for row in result:
+            # Store fetched fields into variables
+            field1_values.append(row[0])  # Assuming field1 is the first field in the query result
+            field2_values.append(row[1])  # Assuming field2 is the second field in the query result
+            
+	   #or using non array variables
+	   #field1_value = result[0]  # Assuming field1 is the first field in the query result
+           #field2_value = result[1]  # Assuming field2 is the second field in the query result
+           
+        # Now you have field values stored in variables
+        # You can use them as needed, for example:
+        for value in field1_values:
+            print(value)
+
+        for value in field2_values:
+            print(value)
+            
+       #or using non array variables
+        #if result:
+            # Store fetched fields into variables
+            #field1_value = result[0]  # Assuming field1 is the first field in the query result
+            #field2_value = result[1]  # Assuming field2 is the second field in the query result
+
+            # Now you have individual variables containing the fetched values
+            # You can use them as needed
+            #print(field1_value)
+            #print(field2_value)
