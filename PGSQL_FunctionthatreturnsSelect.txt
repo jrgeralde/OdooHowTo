@@ -1,0 +1,18 @@
+-- sample function (not procedure) to return a dataset 
+-- to call issue a query, example: select * fnget_roomtype_rooms(1)
+CREATE OR REPLACE FUNCTION fnget_roomtype_rooms(type_id BIGINT)
+RETURNS TABLE (
+    rid BIGINT,
+    rname VARCHAR,
+    rdescription VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    -- select id,name,description from public.hotel_rooms
+    -- where roomtype_id=1;
+    -- or for queries without where conditions
+  select cast(type_id as BIGINT) ,cast('101' AS VARCHAR),cast('singleroom' as VARCHAR);
+
+    
+END;
+$$ LANGUAGE plpgsql;
