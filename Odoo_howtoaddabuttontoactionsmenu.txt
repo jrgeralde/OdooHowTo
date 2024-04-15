@@ -1,0 +1,58 @@
+1. Create a Transient Model (Wizard): First, define a transient model for your wizard. 
+This model will handle the logic and data manipulation for the wizard. 
+Let's create a simple example of a wizard that calculates the total price of selected sales orders.
+
+from odoo import models, fields, api
+
+class SaleOrderTotalWizard(models.TransientModel):
+    _name = 'sale.order.total.wizard'
+
+    sale_order_ids = fields.Many2many('sale.order', string='Sale Orders')
+    total_price = fields.Float(string='Total Price', compute='_compute_total_price')
+
+    @api.depends('sale_order_ids')
+    def _compute_total_price(self):
+        for wizard in self:
+            wizard.total_price = sum(order.amount_total for order in wizard.sale_order_ids)
+
+    def calculate_total_price(self):
+        # Perform any additional logic here if needed
+        return {
+            'type': 'ir.actions.act_window_close',
+        }
+
+2. Define an Action: Next, define an action that will trigger the wizard. 
+This action will typically be associated with a button in the user interface.
+
+<odoo>
+    <data>
+        <!-- Define an action -->
+        <record id="action_sale_order_total_wizard" model="ir.actions.act_window">
+            <field name="name">Calculate Total Price</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sale.order.total.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
+
+3. Add a Button in Action Menu: Finally, add a button to the action menu that triggers the wizard.
+<odoo>
+    <data>
+        <!-- Add a button to the action menu -->
+        <record id="view_sale_order_form_inherit" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form" position="inside">
+                    <header>
+                        <button name="%(action_sale_order_total_wizard)d" string="Calculate Total Price" type="action"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
+
